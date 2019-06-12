@@ -1,174 +1,353 @@
-<div class="flex-container">
-  <div  class="one" style="width: 40%">
-    <h3>Edit</h3>
-    <hr>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 offset-md-2">
+
+
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+            aria-controls="nav-home" aria-selected="true">Preview</a>
+          <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+            aria-controls="nav-profile" aria-selected="false">Edit</a>
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+          <br>
+          <div *ngFor="let item of list;let i = index">
+            <div class="card">
+
+
+              <div class="card-body">
 
 
 
-<div *ngFor="let item of list;let i = index" class="box">
+                <div *ngIf="item.type=='title'">
+                  <h5 *ngIf="item.text" class="card-title">{{item.text}}</h5>
+                  <h6 *ngIf="item.subtitle" class="card-subtitle mb-2 text-muted">{{item.subtitle}}</h6>
+                  <p>
+                    <span *ngIf="item.by">By: {{item.by}}</span>
+                    <br>
+                    <span *ngIf="item.source">Source: {{item.source}}</span>
+                    <br>
+                    <span *ngIf="item.timestamp"> Accessed on: {{item.timestamp}}</span>
+                  </p>
+                  <a *ngIf="item.url" href="{{item.url}}" class="card-link">{{item.url}}</a>
+                </div>
+
+                <div *ngIf="item.type=='text'">
+                  <h5 *ngIf="item.title" class="card-title">{{item.title}}</h5>
+                  <p *ngIf="item.text" class="card-text">{{item.text}}</p>
+                </div>
+
+                <div *ngIf="item.type=='summary'">
+                  <h5 *ngIf="item.ref" class="card-title"> Summary : {{item.ref}}</h5>
+                  <p *ngIf="item.text" class="card-text">{{item.text}}</p>
+                </div>
+
+                <div *ngIf="item.type=='word'">
+
+                  <h3 *ngIf="item.word" class="card-title">{{item.word}}</h3>
+                  <p *ngIf="item.text" class="card-text">{{item.text}}</p>
+                </div>
 
 
-	<select (change)="modifyType($event.target.value,i)">
-  <option *ngFor="let type1 of validTypes" value="{{type1.name}}" [selected]="type1.name==item.type" >{{type1.value}}</option>
-</select>
+                <div *ngIf="item.type=='quote'">
+                  <blockquote class="blockquote text-center">
+                    <p class="mb-0">{{item.text}}</p>
+                    <footer class="blockquote-footer">{{item.ref}}</footer>
+                  </blockquote>
+                </div>
 
-	<div *ngIf="item.type=='title'">
-   title :  <input type="text" [(ngModel)]="item.text">
-   <br>
-   subtitle :  <input type="text" [(ngModel)]="item.subtitle">
-   <br>
-    by :  <input type="text" [(ngModel)]="item.by">
-   <br>
-    source :  <input type="text" [(ngModel)]="item.source">
-   <br>
-   url :  <input type="text" [(ngModel)]="item.url">
-   <br>
-   
-   date :  <input type="date" [(ngModel)]="item.date">
-   <br>
+                <div *ngIf="item.type=='ref'">
+                  <p *ngIf="item.url else src">
+                    <span *ngIf="item.text else nosrc">
+                      <p class="text-center">
+                        <a target="_new" href="{{item.url}}">{{item.text}}</a>
+                      </p>
+                    </span>
+                    <ng-template #nosrc>
+                      <p class="text-center">
+                        <a target="_new" href="{{item.url}}">{{item.url}}</a>
+                      </p>
+                    </ng-template>
+                  </p>
+                  <ng-template #src>
+                    <p class="text-center"> {{item.text}}</p>
+                  </ng-template>
+                </div>
 
-	<br>
-	</div>
-
-	<div *ngIf="item.type=='text'">
-    title :  <input type="text" [(ngModel)]="item.title">
-   <br>
-   text  :  <input type="text" [(ngModel)]="item.text">
-   <br>
-		
-	</div>
-
-	<div *ngIf="item.type=='summary'">
-     reference :  <input type="text" [(ngModel)]="item.ref">
-   <br>
-   text  :  <input type="text" [(ngModel)]="item.text">
-   <br>
-
-  </div>
-
-  <div *ngIf="item.type=='word'">
-    word :  <input type="text" [(ngModel)]="item.word">
-   <br>
-   text  :  <input type="text" [(ngModel)]="item.text">
-   <br>
-
-  </div>
-
-
-  <div *ngIf="item.type=='quote'">
-
-    
-   text  :  <input type="text" [(ngModel)]="item.text">
-   <br>
-     reference  :  <input type="text" [(ngModel)]="item.ref">
-   <br>
-  </div>
-
-  <div *ngIf="item.type=='ref'">
-      text :  <input type="text" [(ngModel)]="item.text">
-   <br>
-     url :  <input type="text" [(ngModel)]="item.url">
-   <br>
-     </div>
-
-  <div *ngIf="item.type=='check'">
-    <br>
-     <input type="checkbox" name="{{item.id}}" id="{{item.id}}" 
-     [checked]="item.checked"
-  (change)="item.checked = !item.checked"> <input type="text" [(ngModel)]="item.text">
-   <br>
-  </div>
-
-  <div *ngIf="item.type=='def'">
-    term :  <input type="text" [(ngModel)]="item.term">
-   <br>
-     text :  <input type="text" [(ngModel)]="item.text">
-   <br>
-  </div>
-
-  <div *ngIf="item.type=='log'">
-     timestamp :  <input type="text" [(ngModel)]="item.timestamp">
-   <br>
-     text :  <input type="text" [(ngModel)]="item.text">
-  </div>
-  <span>[{{item.type}}]  <button (click)="deleteItem(i)">delete</button> &nbsp;
-  
-  <span *ngIf="i>0"> <button (click)="moveUp(i)">move up</button></span>
-    <span *ngIf="i<list.length-1"> <button (click)="moveDown(i)">move down</button></span>
-    </span> 
-    <br> <br>
-    <br> <br>
-</div>
-
-
-<button (click)="appendNew()">Add new</button>
+                <div *ngIf="item.type=='check'">
+                  <div class="checkbox">
+                    <label style="font-size: 1.6em">
+                      <input type="checkbox" name="{{item.id}}" id="{{item.id}}" [checked]="item.checked"
+                        (change)="item.checked = !item.checked">
+                      &nbsp; {{item.text}}
+                    </label>
+                  </div>
 
 
 
-  </div>
-  <div class="two" style="width: 60%">
-    <h3>Preview</h3>
-    <hr>
-    <div *ngFor="let item of list;let i = index" class="box">
-      <div *ngIf="item.type=='title'">
-        <h2 *ngIf="item.text">{{item.text}}</h2>
-        <h3 *ngIf="item.subtitle">{{item.subtitle}}</h3>
-        <p *ngIf="item.by"> By: {{item.by}}</p>
-        <p *ngIf="item.source"> Source: {{item.source}}</p>
-        <p *ngIf="item.url"> URL: <a href="{{item.url}}">{{item.url}}</a></p>
-        <p *ngIf="item.date"> Accessed on: {{item.date}}</p>
+
+                </div>
+
+                <div *ngIf="item.type=='def'">
+                  <h5 *ngIf="item.term" class="card-title"><i>{{item.term}}</i></h5>
+                  <p *ngIf="item.text" class="card-text">{{item.text}}</p>
+                </div>
+
+                <div *ngIf="item.type=='log'">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-5"><code>{{item.timestamp}}</code></div>
+                    <div class="col-xs-12 col-sm-7">{{item.text}}</div>
+                  </div>
+                  <!-- <p class="card-text"> <br>{{item.text}} </p> -->
+                </div>
+                <!-- <span>[{{item.type}}] </span> -->
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+          <br>
+          <div *ngFor="let item of list;let i = index" class="box">
+            <div class="card">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-11">
+                    <div>
+                      <div class="form-row align-items-center">
+                        <div class="col-auto my-1">
+                          <select class="custom-select mr-sm-2 verySmall verySmallWidth"
+                            (change)="modifyType($event.target.value,i)">
+                            <option *ngFor="let type1 of validTypes" value="{{type1.name}}"
+                              [selected]="type1.name==item.type">
+                              {{type1.value}}</option>
+                          </select>
+                        </div>
+
+                        <div class="col-auto my-1" *ngIf="i>0">
+                          <button (click)="moveUp(i)" class="btn btn-sm btn-primary verySmall">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                        <div class="col-auto my-1" *ngIf="i<list.length-1">
+                          <button (click)="moveDown(i)" class="btn btn-sm btn-primary verySmall"><i
+                              class="fa fa-arrow-down" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-sm-1">
+                    <div>
+                      <div class="form-row align-items-center">
+
+                        <div class="col-auto my-1">
+                          <button class="btn btn-sm btn-danger verySmall" (click)="deleteItem(i)"> <i
+                              class="fa fa-trash"></i></button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+
+
+
+                <div *ngIf="item.type=='title'">
+                  <div>
+                      <div class="form-group row">
+                          <label class="col-sm-2 col-form-label text-muted">Title</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.text">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-muted">Subtitle</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.subtitle">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                              <label class="col-sm-2 col-form-label text-muted">Source</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.source">
+                              </div>
+                            </div>   
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-muted">By</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.by">
+                                </div>
+                              </div>   
+                              <div class="form-group row">
+                                  <label class="col-sm-2 col-form-label text-muted">URL</label>
+                                  <div class="col-sm-10">
+                                    <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.url">
+                                  </div>
+                                </div>  
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label text-muted">Timestamp</label>
+                                    <div class="col-sm-8">
+                                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.timestamp">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button (click)="addTime(i)" class="btn btn-sm">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        </button>
+                                      </div>
+                                  </div>
+                  
+                    
+                  </div>
+                </div>
+
+                <div *ngIf="item.type=='text'">
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Title</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.title">
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+                </div>
+
+                <div *ngIf="item.type=='summary'">
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Reference</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.ref">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+
+                </div>
+
+                <div *ngIf="item.type=='word'">
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Word</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.word">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+
+                </div>
+
+
+                <div *ngIf="item.type=='quote'">
+
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Reference</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.ref">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+                </div>
+
+                <div *ngIf="item.type=='ref'">
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">URL</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.url">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+                </div>
+
+                <div *ngIf="item.type=='check'">
+
+
+
+                    <div class="form-group row">
+                        <!-- <label class="col-sm-2 col-form-label text-muted">Term</label> -->
+                        <div class="custom-control custom-checkbox col-sm-1">
+                            <input type="checkbox" name="{{item.id}}" id="{{item.id}}" [checked]="item.checked"
+                              (change)="item.checked = !item.checked">
+                          </div>
+                        <div class="col-sm-11">
+                          <input type="text" class="form-control" id="title1" [(ngModel)]="item.text">
+                        </div>
+                      </div>
+
+
+                
+                </div>
+
+                <div *ngIf="item.type=='def'">
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Term</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.term">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+                </div>
+
+                <div *ngIf="item.type=='log'">
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-muted">Timestamp</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control form-control-sm" id="title1" [(ngModel)]="item.timestamp">
+                    </div>
+                    <div class="col-sm-2">
+                        <button (click)="addTime(i)" class="btn btn-sm">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="text-muted">Text</label>
+                    <textarea class="form-control" rows="5" [(ngModel)]="item.text"></textarea>
+                  </div>
+                </div>
+
+
+
+
+
+
+              </div>
+
+            </div>
+            <br>
+          </div>
+          <br>
+          <button class="btn btn-lg btn-primary "(click)="appendNew()">+ Add new</button>
+
+          <br>
+
+        </div>
       </div>
-    
-      <div *ngIf="item.type=='text'">
-        <h3 *ngIf="item.title">{{item.title}}</h3>
-        <p *ngIf="item.text">{{item.text}}</p>
-      </div>
-    
-      <div *ngIf="item.type=='summary'">
-        <h4>Summary <span *ngIf="item.ref"> : {{item.ref}}</span>  </h4>
-        <p *ngIf="item.text">{{item.text}}</p>
-      </div>
-    
-      <div *ngIf="item.type=='word'">
-        <h3 *ngIf="item.word">{{item.word}}</h3>
-        <p *ngIf="item.text">{{item.text}}</p>
-      </div>
-    
-    
-      <div *ngIf="item.type=='quote'">
-       <blockquote>{{item.text}}
-        <br>
-        <i> - {{item.ref}}</i>
-       </blockquote>
-      </div>
-    
-      <div *ngIf="item.type=='ref'">
-        <p *ngIf="item.url else src">
-    
-          <span *ngIf="item.text else nosrc"> <a target="_new" href="{{item.url}}">{{item.text}}</a> </span> <ng-template #nosrc>
-            <a target="_new" href="{{item.url}}">{{item.url}}</a>
-          </ng-template>
-        </p>
-        <ng-template #src>{{item.text}}</ng-template>
-      </div>
-    
-      <div *ngIf="item.type=='check'">
-        <br>
-         <input type="checkbox" name="{{item.id}}" id="{{item.id}}" [checked]="item.checked"  (change)="item.checked = !item.checked"> .  {{item.text}}
-      </div>
-    
-      <div *ngIf="item.type=='def'">
-        <p><i> {{item.term}}</i> :  {{item.text}} </p>
-      </div>
-    
-      <div *ngIf="item.type=='log'">
-          <p><code>{{item.timestamp}}</code> : {{item.text}} </p>
-    
-      </div>
-      <span>[{{item.type}}]   </span>  
-      <br><br>
-
     </div>
-
   </div>
 </div>

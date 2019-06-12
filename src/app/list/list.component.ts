@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
         by: "",
         source: "",
         url: "",
-        date: ""
+        timestamp: ""
       }
     },
     {
@@ -105,7 +105,7 @@ export class ListComponent implements OnInit {
       url: "https://www.noteweb.site",
       by: "Some author",
       subtitle: "Some more text",
-      date: "2019-03-03",
+      timestamp: "2019-03-03",
       source: "some reputed source"
     },
     {
@@ -195,6 +195,11 @@ export class ListComponent implements OnInit {
       this.list[index + 1] = this.list[index];
       this.list[index] = tmp;
     }
+  }
+
+  addTime(i){
+    let curDate = new Date()
+    this.list[i]['timestamp'] = curDate.toString();
   }
 
 
