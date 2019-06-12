@@ -1,0 +1,174 @@
+<div class="flex-container">
+  <div  class="one" style="width: 40%">
+    <h3>Edit</h3>
+    <hr>
+
+
+
+<div *ngFor="let item of list;let i = index" class="box">
+
+
+	<select (change)="modifyType($event.target.value,i)">
+  <option *ngFor="let type1 of validTypes" value="{{type1.name}}" [selected]="type1.name==item.type" >{{type1.value}}</option>
+</select>
+
+	<div *ngIf="item.type=='title'">
+   title :  <input type="text" [(ngModel)]="item.text">
+   <br>
+   subtitle :  <input type="text" [(ngModel)]="item.subtitle">
+   <br>
+    by :  <input type="text" [(ngModel)]="item.by">
+   <br>
+    source :  <input type="text" [(ngModel)]="item.source">
+   <br>
+   url :  <input type="text" [(ngModel)]="item.url">
+   <br>
+   
+   date :  <input type="date" [(ngModel)]="item.date">
+   <br>
+
+	<br>
+	</div>
+
+	<div *ngIf="item.type=='text'">
+    title :  <input type="text" [(ngModel)]="item.title">
+   <br>
+   text  :  <input type="text" [(ngModel)]="item.text">
+   <br>
+		
+	</div>
+
+	<div *ngIf="item.type=='summary'">
+     reference :  <input type="text" [(ngModel)]="item.ref">
+   <br>
+   text  :  <input type="text" [(ngModel)]="item.text">
+   <br>
+
+  </div>
+
+  <div *ngIf="item.type=='word'">
+    word :  <input type="text" [(ngModel)]="item.word">
+   <br>
+   text  :  <input type="text" [(ngModel)]="item.text">
+   <br>
+
+  </div>
+
+
+  <div *ngIf="item.type=='quote'">
+
+    
+   text  :  <input type="text" [(ngModel)]="item.text">
+   <br>
+     reference  :  <input type="text" [(ngModel)]="item.ref">
+   <br>
+  </div>
+
+  <div *ngIf="item.type=='ref'">
+      text :  <input type="text" [(ngModel)]="item.text">
+   <br>
+     url :  <input type="text" [(ngModel)]="item.url">
+   <br>
+     </div>
+
+  <div *ngIf="item.type=='check'">
+    <br>
+     <input type="checkbox" name="{{item.id}}" id="{{item.id}}" 
+     [checked]="item.checked"
+  (change)="item.checked = !item.checked"> <input type="text" [(ngModel)]="item.text">
+   <br>
+  </div>
+
+  <div *ngIf="item.type=='def'">
+    term :  <input type="text" [(ngModel)]="item.term">
+   <br>
+     text :  <input type="text" [(ngModel)]="item.text">
+   <br>
+  </div>
+
+  <div *ngIf="item.type=='log'">
+     timestamp :  <input type="text" [(ngModel)]="item.timestamp">
+   <br>
+     text :  <input type="text" [(ngModel)]="item.text">
+  </div>
+  <span>[{{item.type}}]  <button (click)="deleteItem(i)">delete</button> &nbsp;
+  
+  <span *ngIf="i>0"> <button (click)="moveUp(i)">move up</button></span>
+    <span *ngIf="i<list.length-1"> <button (click)="moveDown(i)">move down</button></span>
+    </span> 
+    <br> <br>
+    <br> <br>
+</div>
+
+
+<button (click)="appendNew()">Add new</button>
+
+
+
+  </div>
+  <div class="two" style="width: 60%">
+    <h3>Preview</h3>
+    <hr>
+    <div *ngFor="let item of list;let i = index" class="box">
+      <div *ngIf="item.type=='title'">
+        <h2 *ngIf="item.text">{{item.text}}</h2>
+        <h3 *ngIf="item.subtitle">{{item.subtitle}}</h3>
+        <p *ngIf="item.by"> By: {{item.by}}</p>
+        <p *ngIf="item.source"> Source: {{item.source}}</p>
+        <p *ngIf="item.url"> URL: <a href="{{item.url}}">{{item.url}}</a></p>
+        <p *ngIf="item.date"> Accessed on: {{item.date}}</p>
+      </div>
+    
+      <div *ngIf="item.type=='text'">
+        <h3 *ngIf="item.title">{{item.title}}</h3>
+        <p *ngIf="item.text">{{item.text}}</p>
+      </div>
+    
+      <div *ngIf="item.type=='summary'">
+        <h4>Summary <span *ngIf="item.ref"> : {{item.ref}}</span>  </h4>
+        <p *ngIf="item.text">{{item.text}}</p>
+      </div>
+    
+      <div *ngIf="item.type=='word'">
+        <h3 *ngIf="item.word">{{item.word}}</h3>
+        <p *ngIf="item.text">{{item.text}}</p>
+      </div>
+    
+    
+      <div *ngIf="item.type=='quote'">
+       <blockquote>{{item.text}}
+        <br>
+        <i> - {{item.ref}}</i>
+       </blockquote>
+      </div>
+    
+      <div *ngIf="item.type=='ref'">
+        <p *ngIf="item.url else src">
+    
+          <span *ngIf="item.text else nosrc"> <a target="_new" href="{{item.url}}">{{item.text}}</a> </span> <ng-template #nosrc>
+            <a target="_new" href="{{item.url}}">{{item.url}}</a>
+          </ng-template>
+        </p>
+        <ng-template #src>{{item.text}}</ng-template>
+      </div>
+    
+      <div *ngIf="item.type=='check'">
+        <br>
+         <input type="checkbox" name="{{item.id}}" id="{{item.id}}" [checked]="item.checked"  (change)="item.checked = !item.checked"> .  {{item.text}}
+      </div>
+    
+      <div *ngIf="item.type=='def'">
+        <p><i> {{item.term}}</i> :  {{item.text}} </p>
+      </div>
+    
+      <div *ngIf="item.type=='log'">
+          <p><code>{{item.timestamp}}</code> : {{item.text}} </p>
+    
+      </div>
+      <span>[{{item.type}}]   </span>  
+      <br><br>
+
+    </div>
+
+  </div>
+</div>
